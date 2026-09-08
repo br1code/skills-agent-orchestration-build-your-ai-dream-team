@@ -244,12 +244,12 @@ jobs:
       - name: Check project data JSON
         id: check-json
         continue-on-error: true
-        run: python3 -m json.tool app/project-data.json >/dev/null
+        run: python -m json.tool app/project-data.json >/dev/null
 
       - name: Check launch configuration JSON
         id: check-launch-json
         continue-on-error: true
-        run: python3 -m json.tool .vscode/launch.json >/dev/null
+        run: python -m json.tool .vscode/launch.json >/dev/null
 
       - name: Check launch name
         id: check-launch-name

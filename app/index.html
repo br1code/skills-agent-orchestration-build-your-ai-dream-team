@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A contributor-friendly overview of project status and priorities.">
+    <title>Project Pulse</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="page-shell">
+        <p class="eyebrow">Contributor workspace</p>
+        <h1>Project Pulse</h1>
+        <p class="intro">A quick view of what is moving, what needs attention, and where contributors can help.</p>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section aria-labelledby="projects-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Team overview</p>
+            <h2 id="projects-heading">Projects</h2>
+          </div>
+          <p id="dashboard-status" class="dashboard-status" role="status" aria-live="polite">Loading projects…</p>
+        </div>
+
+        <div id="dashboard" class="dashboard" aria-live="polite" aria-busy="true">
+          <p id="loading-state" class="state-message">Loading project updates…</p>
+        </div>
+      </section>
+    </main>
+
+    <noscript>
+      <p class="state-message">Project Pulse needs JavaScript enabled to load the project updates.</p>
+    </noscript>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var dashboard = document.getElementById("dashboard");
+        var dashboardStatus = document.getElementById("dashboard-status");
+        var dataUrl = "project-data.json";
+
+        function textOrFallback(value) {
+          if (typeof value === "string" && value.trim() !== "") {
+            return value;
+          }
+          if (typeof value === "number" || typeof value === "boolean") {
+            return String(value);
+          }
+          return "Not provided";
+        }
+
+        function normalizeBadgeValue(value) {
+          var normalized = textOrFallback(value)
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+          return normalized || "not-provided";
+        }
+
+        function createDetail(label, value, badgeType) {
+          var term = document.createElement("dt");
+          term.textContent = label;
+          var description = document.createElement("dd");
+          description.textContent = textOrFallback(value);
+          if (badgeType) {
+            description.className = badgeType + "-badge";
+            description.setAttribute("data-" + badgeType, normalizeBadgeValue(value));
+          }
+          return { term: term, description: description };
+        }
+
+        function showState(message, className) {
+          dashboard.replaceChildren();
+          var state = document.createElement("p");
+          state.className = "state-message " + className;
+          state.textContent = message;
+          dashboard.appendChild(state);
+        }
+
+        function showError(errorMessage) {
+          dashboard.replaceChildren();
+          var state = document.createElement("div");
+          state.className = "state-message error-state";
+
+          var heading = document.createElement("h3");
+          heading.textContent = "Projects could not be loaded";
+          state.appendChild(heading);
+
+          var explanation = document.createElement("p");
+          explanation.textContent = errorMessage + " Check that the local server is running, then try again.";
+          state.appendChild(explanation);
+
+          var retry = document.createElement("button");
+          retry.type = "button";
+          retry.textContent = "Try again";
+          retry.addEventListener("click", loadProjects);
+          state.appendChild(retry);
+          dashboard.appendChild(state);
+          dashboardStatus.textContent = "Unable to load projects";
+          dashboard.removeAttribute("aria-busy");
+        }
+
+        function renderProjects(projects) {
+          dashboard.replaceChildren();
+          projects.forEach(function (project, index) {
+            var record = project && typeof project === "object" ? project : {};
+            var card = document.createElement("article");
+            card.className = "project-card";
+
+            var heading = document.createElement("h3");
+            heading.textContent = textOrFallback(record.name);
+            card.appendChild(heading);
+
+            var details = document.createElement("dl");
+            var fields = [
+              ["Owner", record.owner],
+              ["Status", record.status, "status"],
+              ["Recent activity", record.recentActivity],
+              ["Priority", record.priority, "priority"]
+            ];
+            fields.forEach(function (field) {
+              var detail = createDetail(field[0], field[1], field[2]);
+              details.appendChild(detail.term);
+              details.appendChild(detail.description);
+            });
+            card.appendChild(details);
+            card.setAttribute("aria-label", "Project " + textOrFallback(record.name));
+            card.dataset.projectIndex = String(index + 1);
+            dashboard.appendChild(card);
+          });
+          dashboardStatus.textContent = projects.length + (projects.length === 1 ? " project" : " projects") + " shown";
+          dashboard.removeAttribute("aria-busy");
+        }
+
+        function loadProjects() {
+          dashboard.setAttribute("aria-busy", "true");
+          dashboardStatus.textContent = "Loading projects…";
+          showState("Loading project updates…", "loading-state");
+          fetch(dataUrl, { cache: "no-store" })
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error("The project data request returned " + response.status + ".");
+              }
+              return response.json();
+            })
+            .then(function (data) {
+              if (!data || typeof data !== "object" || !Array.isArray(data.projects)) {
+                throw new Error("The project data does not contain a valid projects list.");
+              }
+              if (data.projects.length === 0) {
+                showState("No projects are available yet. Add a project to project-data.json to get started.", "empty-state");
+                dashboardStatus.textContent = "No projects available";
+                dashboard.removeAttribute("aria-busy");
+                return;
+              }
+              renderProjects(data.projects);
+            })
+            .catch(function (error) {
+              showError(error instanceof Error ? error.message : "The project data is invalid.");
+            });
+        }
+
+        loadProjects();
+      }());
+    </script>
+  </body>
+</html>

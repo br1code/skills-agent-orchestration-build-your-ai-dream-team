@@ -205,14 +205,14 @@ require_grep 'app/\*\*' .github/workflows/3-step.yml "Step 3 watches app outputs
 require_grep '\.vscode/launch\.json' .github/workflows/3-step.yml "Step 3 watches and checks the launch configuration"
 require_grep 'docs/final-handoff.md' .github/workflows/4-step.yml "Step 4 watches docs/final-handoff.md"
 require_grep 'Run Project Pulse Dashboard' .github/workflows/3-step.yml "Step 3 checks the launch configuration name"
-require_grep 'python3 -m json.tool \.vscode/launch\.json' .github/workflows/3-step.yml "Step 3 validates launch configuration JSON"
+require_grep 'python -m json.tool \.vscode/launch\.json' .github/workflows/3-step.yml "Step 3 validates launch configuration JSON"
 require_grep 'keyphrase: \.dashboard' .github/workflows/3-step.yml "Step 3 checks the exact dashboard CSS selector"
 require_grep 'keyphrase: project-card' .github/workflows/3-step.yml "Step 3 checks project card markup"
 require_grep 'keyphrase: \.project-card' .github/workflows/3-step.yml "Step 3 checks project card styling"
 require_grep 'keyphrase: border-radius' .github/workflows/3-step.yml "Step 3 checks polished rounded styling"
 require_grep 'keyphrase: box-shadow' .github/workflows/3-step.yml "Step 3 checks polished shadow styling"
 require_grep 'keyphrase: index.html' .github/workflows/3-step.yml "Step 3 checks launch target phrase"
-if grep -E 'Checked that the dashboard launch configuration runs the app|check-launch-command|check-launch-url|check-server-ready-action|keyphrase: python3 -m http\.server|keyphrase: http://localhost|keyphrase: serverReadyAction' .github/workflows/3-step.yml; then
+if grep -E 'Checked that the dashboard launch configuration runs the app|check-launch-command|check-launch-url|check-server-ready-action|keyphrase: python -m http\.server|keyphrase: http://localhost|keyphrase: serverReadyAction' .github/workflows/3-step.yml; then
   fail "Step 3 workflow should check files and phrases only, not running apps or servers"
 else
   pass "Step 3 workflow avoids running app and server checks"

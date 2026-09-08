@@ -18,7 +18,7 @@ Repository inspection found that `app/index.html`, `app/styles.css`, `app/projec
 
 - `app/index.html`: own the semantic page structure, exact `Project Pulse` title, stylesheet and data references, data loading/rendering behavior, visible project cards using the `project-card` class, and user-facing loading and error states.
 - `app/project-data.json`: own valid deterministic fixture data with a top-level `projects` array. Every project object must include `name`, `owner`, `status`, `recentActivity`, and `priority`; include enough varied projects to exercise the card layout.
-- `.vscode/launch.json`: own the strict JSON launch configuration named `Run Project Pulse Dashboard`. It must serve the `app` directory with `python3 -m http.server 5500`, use `cwd` `${workspaceFolder}/app`, and open `http://localhost:%s/index.html` through `serverReadyAction`.
+- `.vscode/launch.json`: own the strict JSON launch configuration named `Run Project Pulse Dashboard`. It must serve the `app` directory with `python -m http.server 5500`, use `cwd` `${workspaceFolder}/app`, and open `http://localhost:%s/index.html` through `serverReadyAction`.
 - Do not edit `app/styles.css` except when the Orchestrator explicitly resolves an integration defect that cannot be fixed in markup or data.
 
 ### Orchestrator
@@ -99,7 +99,7 @@ Use several representative records so active, complete or blocked status and at 
 
 ### Launch configuration
 
-`.vscode/launch.json` must be strict JSON with no comments and must include a configuration named `Run Project Pulse Dashboard`. The configuration must run exactly `python3 -m http.server 5500`, set `cwd` to `${workspaceFolder}/app`, and use `serverReadyAction` with a capture pattern for the server port and `uriFormat` set to `http://localhost:%s/index.html`. The launch target must open the frontend entry point, not `http://localhost:5500/` or a directory listing. Use deterministic VS Code launch fields and do not add unrelated configurations.
+`.vscode/launch.json` must be strict JSON with no comments and must include a configuration named `Run Project Pulse Dashboard`. The configuration must run exactly `python -m http.server 5500`, set `cwd` to `${workspaceFolder}/app`, and use `serverReadyAction` with a capture pattern for the server port and `uriFormat` set to `http://localhost:%s/index.html`. The launch target must open the frontend entry point, not `http://localhost:5500/` or a directory listing. Use deterministic VS Code launch fields and do not add unrelated configurations.
 
 ## Edge cases and risks
 
@@ -110,7 +110,7 @@ Use several representative records so active, complete or blocked status and at 
 - Status and priority combinations must remain understandable in grayscale, keyboard use, and color-vision differences.
 - A slow server response should leave the loading state visible until data arrives; a failed response should not leave stale cards on screen.
 - If the server port is occupied, the launch smoke test should report the launch failure and use a free port only for an independent manual diagnostic; the committed launch configuration must remain on port 5500.
-- Windows environments may expose Python under a different executable name, but the required committed command is `python3 -m http.server 5500`; report an environment limitation rather than silently changing the required configuration.
+- The committed launch command uses `python -m http.server 5500` so it works with the local Windows setup and remains available in the Codespaces environment.
 - Relative asset paths must work with `cwd` set to `app`; paths that assume the repository root are an integration defect.
 
 ## Validation expectations
@@ -118,7 +118,7 @@ Use several representative records so active, complete or blocked status and at 
 ### Repository and syntax checks
 
 - Confirm all four assigned files exist: `app/index.html`, `app/styles.css`, `app/project-data.json`, and `.vscode/launch.json`.
-- Run `python3 -m json.tool app/project-data.json` and `python3 -m json.tool .vscode/launch.json`; both must succeed.
+- Run `python -m json.tool app/project-data.json` and `python -m json.tool .vscode/launch.json`; both must succeed.
 - Run the existing repository check `bash scripts/validate-exercise.sh` when the shell environment has the required tools. This is an exercise-level check and should remain green; it does not replace the app smoke test.
 - Review the diff and confirm that only the assigned implementation files were changed during the implementation phase, with no secrets, generated directories, or package files.
 
@@ -127,7 +127,7 @@ Use several representative records so active, complete or blocked status and at 
 - Verify `app/index.html` contains the exact `Project Pulse` title, references `styles.css` and `project-data.json`, contains `.project-card` markup or the rendering template, and exposes `status`, `recentActivity`, and `priority`.
 - Verify `app/styles.css` contains `.dashboard`, `.project-card`, `border-radius`, and `box-shadow`, plus responsive and visible focus styling.
 - Verify the JSON has a top-level `projects` array and that every fixture includes `name`, `owner`, `status`, `recentActivity`, and `priority`.
-- Verify `.vscode/launch.json` contains `Run Project Pulse Dashboard`, `python3 -m http.server 5500`, `${workspaceFolder}/app`, `serverReadyAction`, and `http://localhost:%s/index.html`, with no comments.
+- Verify `.vscode/launch.json` contains `Run Project Pulse Dashboard`, `python -m http.server 5500`, `${workspaceFolder}/app`, `serverReadyAction`, and `http://localhost:%s/index.html`, with no comments.
 
 ### Browser and accessibility checks
 
@@ -138,9 +138,9 @@ Use several representative records so active, complete or blocked status and at 
 
 ## Handoff
 
-The Orchestrator should report the four files created, the Designer and Coder ownership, the validation commands and browser checks that passed, and any environment limitation such as unavailable `python3`. No agent should stage, commit, or push changes; git operations remain under the learner's control.
+The Orchestrator should report the four files created, the Designer and Coder ownership, the validation commands and browser checks that passed, and any remaining environment limitation. No agent should stage, commit, or push changes; git operations remain under the learner's control.
 
 ## Open questions
 
 - No product-specific branding, real project records, or framework requirement exists beyond the brief, so use neutral contributor-friendly sample data and a dependency-free implementation.
-- If the environment cannot launch `python3`, preserve the required launch configuration and record the limitation while validating the same command in an environment where it is available.
+- If the environment cannot launch `python`, install or configure Python so the committed launch command remains consistent across local validation and Codespaces.

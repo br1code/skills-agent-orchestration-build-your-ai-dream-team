@@ -71,7 +71,7 @@ The dashboard should help contributors quickly understand Mona's team projects. 
    >
    > In launch.json, configure the launch to serve from the app directory.
    >
-   > Use this command: python3 -m http.server 5500.
+   > Use this command: python -m http.server 5500.
    >
    > Add serverReadyAction so it opens
    > http://localhost:%s/index.html.

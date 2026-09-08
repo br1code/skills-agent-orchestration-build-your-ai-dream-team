@@ -1,0 +1,46 @@
+{
+  "projects": [
+    {
+      "name": "Contributor Onboarding",
+      "owner": "Maya Chen",
+      "status": "Active",
+      "recentActivity": "Updated the first-contribution checklist and welcomed three new contributors.",
+      "priority": "High"
+    },
+    {
+      "name": "Design System Refresh",
+      "owner": "Jordan Rivera",
+      "status": "In review",
+      "recentActivity": "Shared revised button and form patterns for accessibility feedback.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Release Notes Automation",
+      "owner": "Sam Okafor",
+      "status": "Blocked",
+      "recentActivity": "Waiting for repository permission changes before testing the publishing workflow.",
+      "priority": "High"
+    },
+    {
+      "name": "Community Office Hours",
+      "owner": "Priya Nair",
+      "status": "Complete",
+      "recentActivity": "Published the recording and captured follow-up questions from the session.",
+      "priority": "Low"
+    },
+    {
+      "name": "Documentation Search",
+      "owner": "Alex Morgan",
+      "status": "Planning",
+      "recentActivity": "Collected search pain points and drafted a small pilot for contributor guides.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Accessibility Audit",
+      "owner": "Riley Thompson",
+      "status": "Active",
+      "recentActivity": "Completed the initial audit and started implementing fixes for color contrast issues.",
+      "priority": "High"
+    }
+  ]
+}
