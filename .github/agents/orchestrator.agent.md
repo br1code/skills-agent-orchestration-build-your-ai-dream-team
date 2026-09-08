@@ -1,7 +1,7 @@
 ---
 name: Orchestrator
 description: Coordinates Planner, Coder, and Designer agents from the GitHub Copilot CLI.
-model: Claude Opus 4.7 (copilot)
+model: GPT-5.6 Luna
 tools: ['read', 'agent', 'memory']
 ---
 

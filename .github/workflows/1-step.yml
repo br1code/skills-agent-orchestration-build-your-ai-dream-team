@@ -130,31 +130,13 @@ jobs:
           keyphrase: Designer
           case-sensitive: false
 
-      - name: Check for updated models
-        id: check-opus-model
+      - name: Check for GPT-5.6 Luna model
+        id: check-luna-model
         continue-on-error: true
         uses: skills/action-keyphrase-checker@v2
         with:
           text-file: docs/agent-team.md
-          keyphrase: Opus 4.7
-          case-sensitive: false
-
-      - name: Check for GPT-5.5 model
-        id: check-gpt-model
-        continue-on-error: true
-        uses: skills/action-keyphrase-checker@v2
-        with:
-          text-file: docs/agent-team.md
-          keyphrase: GPT-5.5
-          case-sensitive: false
-
-      - name: Check for Gemini model
-        id: check-gemini-model
-        continue-on-error: true
-        uses: skills/action-keyphrase-checker@v2
-        with:
-          text-file: docs/agent-team.md
-          keyphrase: Gemini 3.1 Pro
+          keyphrase: GPT-5.6 Luna
           case-sensitive: false
 
       - name: Check learner references agent definitions
@@ -205,7 +187,7 @@ jobs:
               - description: "Checked for the Designer role"
                 passed: ${{ steps.check-designer.outcome == 'success' }}
               - description: "Checked for the updated model assignments"
-                passed: ${{ steps.check-opus-model.outcome == 'success' && steps.check-gpt-model.outcome == 'success' && steps.check-gemini-model.outcome == 'success' }}
+                passed: ${{ steps.check-luna-model.outcome == 'success' }}
               - description: "Checked that the summary references .github/agents"
                 passed: ${{ steps.check-agent-definition-reference.outcome == 'success' }}
               - description: "Checked for Project Pulse context"

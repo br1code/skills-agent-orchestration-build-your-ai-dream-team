@@ -46,10 +46,10 @@ for file in .github/workflows/*.yml; do
   pass "$file parses as YAML"
 done
 
-python3 -m json.tool .devcontainer/devcontainer.json >/dev/null
+python -m json.tool .devcontainer/devcontainer.json >/dev/null
 pass ".devcontainer/devcontainer.json parses as JSON"
 
-python3 -m json.tool .vscode/tasks.json >/dev/null
+python -m json.tool .vscode/tasks.json >/dev/null
 pass ".vscode/tasks.json parses as JSON"
 
 bash -n .devcontainer/postCreate.sh

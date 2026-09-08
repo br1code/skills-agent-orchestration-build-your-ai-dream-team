@@ -1,7 +1,7 @@
 ---
 name: Coder
 description: Implements code-oriented tasks with clear structure, explicit errors, and testable behavior.
-model: GPT-5.5 (copilot)
+model: GPT-5.6 Luna
 tools: ['read', 'edit', 'search', 'execute', 'web', 'memory', 'todo']
 ---
 
